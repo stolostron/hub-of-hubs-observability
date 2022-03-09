@@ -24,7 +24,7 @@ oc apply -n open-cluster-management-observability -f dashboards/
 
 4. Then open the Grafana console of hub-of-hubs and redirect to **Dashboards** -> **Custom**, the dashboards list for the leaf hubs will be similar to the following diagram:
 
-![grafana-dashboards-list-for-hub](./grafana-dashboards-list-for-hub.png)
+![grafana-dashboards-list-for-hub](./images/grafana-dashboards-list-for-hub.png)
 
 - grafana-dashboard-hub-thanos-overview
 
@@ -32,7 +32,7 @@ oc apply -n open-cluster-management-observability -f dashboards/
   oc apply -n open-cluster-management-observability -f dashboards/grafana-dashboard-hub-thanos-overview.yaml
   ```
 
-  ![grafana-dashboard-hub-thanos-overview](./grafana-dashboard-hub-thanos-overview.png)
+  ![grafana-dashboard-hub-thanos-overview](./images/grafana-dashboard-hub-thanos-overview.png)
 
 - grafana-dashboard-hub-thanos-compact
 
@@ -40,7 +40,7 @@ oc apply -n open-cluster-management-observability -f dashboards/
   oc apply -n open-cluster-management-observability -f dashboards/grafana-dashboard-hub-thanos-compact.yaml
   ```
 
-  ![grafana-dashboard-hub-thanos-compact](./grafana-dashboard-hub-thanos-compact.png)
+  ![grafana-dashboard-hub-thanos-compact](./images/grafana-dashboard-hub-thanos-compact.png)
 
 - grafana-dashboard-hub-thanos-query
 
@@ -48,7 +48,7 @@ oc apply -n open-cluster-management-observability -f dashboards/
   oc apply -n open-cluster-management-observability -f dashboards/grafana-dashboard-hub-thanos-query.yaml
   ```
 
-  ![grafana-dashboard-hub-thanos-query](./grafana-dashboard-hub-thanos-query.png)
+  ![grafana-dashboard-hub-thanos-query](./images/grafana-dashboard-hub-thanos-query.png)
 
 - grafana-dashboard-hub-thanos-query-frontend
 
@@ -56,7 +56,7 @@ oc apply -n open-cluster-management-observability -f dashboards/
   oc apply -n open-cluster-management-observability -f dashboards/grafana-dashboard-hub-thanos-query-frontend.yaml
   ```
 
-  ![grafana-dashboard-hub-thanos-query-frontend](./grafana-dashboard-hub-thanos-query-frontend.png)
+  ![grafana-dashboard-hub-thanos-query-frontend](./images/grafana-dashboard-hub-thanos-query-frontend.png)
 
 - grafana-dashboard-hub-thanos-receive
 
@@ -64,7 +64,7 @@ oc apply -n open-cluster-management-observability -f dashboards/
   oc apply -n open-cluster-management-observability -f dashboards/grafana-dashboard-hub-thanos-receive.yaml
   ```
 
-  ![grafana-dashboard-hub-thanos-receive](./grafana-dashboard-hub-thanos-receive.png)
+  ![grafana-dashboard-hub-thanos-receive](./images/grafana-dashboard-hub-thanos-receive.png)
 
 - grafana-dashboard-hub-thanos-rule
 
@@ -72,7 +72,7 @@ oc apply -n open-cluster-management-observability -f dashboards/
   oc apply -n open-cluster-management-observability -f dashboards/grafana-dashboard-hub-thanos-rule.yaml
   ```
 
-  ![grafana-dashboard-hub-thanos-rule](./grafana-dashboard-hub-thanos-rule.png)
+  ![grafana-dashboard-hub-thanos-rule](./images/grafana-dashboard-hub-thanos-rule.png)
 
 - grafana-dashboard-hub-thanos-store
 
@@ -80,5 +80,5 @@ oc apply -n open-cluster-management-observability -f dashboards/
   oc apply -n open-cluster-management-observability -f dashboards/grafana-dashboard-hub-thanos-store.yaml
   ```
 
-  ![grafana-dashboard-hub-thanos-store](./grafana-dashboard-hub-thanos-store.png)
+  ![grafana-dashboard-hub-thanos-store](./images/grafana-dashboard-hub-thanos-store.png)
 
