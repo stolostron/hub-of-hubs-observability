@@ -1,0 +1,90 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: observability-metrics-custom-allowlist
+data:
+  metrics_list.yaml: |
+    names:
+    - acm_managed_cluster_info
+    # - policy_governance_info
+    # - policyreport_info
+    # - acm_go_memstats_alloc_bytes
+    # - acm_go_memstats_heap_alloc_bytes
+    # - acm_go_memstats_alloc_bytes_total
+    # - acm_go_memstats_stack_inuse_bytes
+    # - acm_go_memstats_heap_inuse_bytes
+    # - acm_go_goroutines
+    # - acm_go_gc_duration_seconds
+    - acm_http_requests_total
+    - acm_http_request_duration_seconds_bucket
+    - acm_grpc_client_handled_total
+    - acm_grpc_client_handling_seconds_bucket
+    - acm_grpc_server_handled_total
+    - acm_grpc_server_handling_seconds_bucket
+    - acm_thanos_compact_group_compactions_total
+    - acm_thanos_compact_group_compactions_failures_total
+    - acm_thanos_compact_downsample_total
+    - acm_thanos_compact_downsample_failed_total
+    - acm_thanos_compact_garbage_collection_total
+    - acm_thanos_compact_garbage_collection_failures_total
+    - acm_thanos_compact_garbage_collection_duration_seconds_bucket
+    - acm_thanos_compact_blocks_cleaned_total
+    - acm_thanos_compact_block_cleanup_failures_total
+    - acm_thanos_compact_blocks_marked_for_deletion_total
+    - acm_thanos_blocks_meta_syncs_total
+    - acm_thanos_blocks_meta_sync_failures_total
+    - acm_thanos_blocks_meta_sync_duration_seconds_bucket
+    - acm_thanos_objstore_bucket_operations_total
+    - acm_thanos_objstore_bucket_operation_failures_total
+    - acm_thanos_objstore_bucket_operation_duration_seconds_bucket
+    - acm_thanos_objstore_bucket_operation_duration_seconds_sum
+    - acm_thanos_objstore_bucket_operation_duration_seconds_count
+    - acm_thanos_objstore_bucket_last_successful_upload_time
+    - acm_thanos_alert_sender_alerts_sent_total
+    - acm_thanos_alert_sender_alerts_dropped_total
+    - acm_thanos_alert_sender_errors_total
+    - acm_thanos_alert_sender_latency_seconds_bucket
+    - acm_thanos_alert_queue_alerts_dropped_total
+    - acm_thanos_query_frontend_queries_total
+    - acm_thanos_query_store_apis_dns_lookups_total
+    - acm_thanos_query_store_apis_dns_failures_total
+    - acm_cortex_cache_request_duration_seconds_count
+    - acm_cortex_cache_fetched_keys
+    - acm_cortex_cache_hits
+    - acm_querier_cache_gets_total
+    - acm_querier_cache_misses_total
+    - acm_thanos_receive_replications_total
+    - acm_thanos_receive_forward_requests_total
+    - acm_prometheus_rule_evaluations_total
+    # - acm_prometheus_rule_group_iterations_missed_total
+    # - acm_prometheus_rule_group_last_duration_seconds
+    # - acm_prometheus_rule_group_interval_seconds
+    - acm_thanos_store_index_cache_requests_total
+    - acm_thanos_store_index_cache_hits_total
+    - acm_thanos_store_index_cache_items_added_total
+    - acm_thanos_store_index_cache_items_evicted_total
+    - acm_thanos_bucket_store_block_loads_total
+    - acm_thanos_bucket_store_block_load_failures_total
+    - acm_thanos_bucket_store_block_drops_total
+    - acm_thanos_bucket_store_block_drop_failures_total
+    - acm_thanos_bucket_store_sent_chunk_size_bytes_bucket
+    - acm_thanos_bucket_store_sent_chunk_size_bytes_sum
+    - acm_thanos_bucket_store_sent_chunk_size_bytes_count
+    - acm_thanos_bucket_store_series_blocks_queried
+    - acm_thanos_bucket_store_series_blocks_queried_sum
+    - acm_thanos_bucket_store_series_blocks_queried_count
+    - acm_thanos_bucket_store_series_data_fetched
+    - acm_thanos_bucket_store_series_data_fetched_sum
+    - acm_thanos_bucket_store_series_data_fetched_count
+    - acm_thanos_bucket_store_series_result_series
+    - acm_thanos_bucket_store_series_result_series_sum
+    - acm_thanos_bucket_store_series_result_series_count
+    - acm_thanos_bucket_store_series_get_all_duration_seconds_bucket
+    - acm_thanos_bucket_store_series_merge_duration_seconds_bucket
+    - acm_thanos_bucket_store_series_gate_duration_seconds_bucket
+    # - acm_thanos_replicate_replication_runs_total
+    # - acm_thanos_replicate_replication_run_duration_seconds_bucket
+    # - acm_blocks_meta_synced
+    # - acm_thanos_replicate_blocks_already_replicated_total
+    # - acm_thanos_replicate_blocks_replicated_total
+    # - acm_thanos_replicate_objects_replicated_total
