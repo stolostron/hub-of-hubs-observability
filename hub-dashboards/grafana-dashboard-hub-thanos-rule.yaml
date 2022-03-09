@@ -1,12 +1,12 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: grafana-dashboard-hub-thanos-compact
+  name: grafana-dashboard-hub-thanos-rule
   namespace: open-cluster-management-observability
   labels:
     grafana-custom-dashboard: "true"
 data:
-  hub-thanos-compact.json: |-
+  hub-thanos-rule.json: |-
    {
       "annotations": {
          "list": [ ]
@@ -28,8 +28,7 @@ data:
                   "dashLength": 10,
                   "dashes": false,
                   "datasource": "$datasource",
-                  "description": "Shows rate of execution for compactions against blocks that are stored in the bucket by compaction group.",
-                  "fill": 10,
+                  "fill": 1,
                   "id": 1,
                   "legend": {
                      "avg": false,
@@ -41,7 +40,7 @@ data:
                      "values": false
                   },
                   "lines": true,
-                  "linewidth": 0,
+                  "linewidth": 1,
                   "links": [ ],
                   "nullPointMode": "null as zero",
                   "percentage": false,
@@ -50,15 +49,15 @@ data:
                   "renderer": "flot",
                   "seriesOverrides": [ ],
                   "spaceLength": 10,
-                  "span": 6,
-                  "stack": true,
+                  "span": 4,
+                  "stack": false,
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "sum by (job, group) (rate(acm_thanos_compact_group_compactions_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))",
+                        "expr": "sum by (job, strategy) (rate(acm_prometheus_rule_evaluations_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))",
                         "format": "time_series",
                         "intervalFactor": 2,
-                        "legendFormat": "compaction {{job}} {{group}}",
+                        "legendFormat": "{{ strategy }}",
                         "legendLink": null,
                         "step": 10
                      }
@@ -66,7 +65,7 @@ data:
                   "thresholds": [ ],
                   "timeFrom": null,
                   "timeShift": null,
-                  "title": "Rate",
+                  "title": "Rule Group Evaluations",
                   "tooltip": {
                      "shared": false,
                      "sort": 0,
@@ -100,15 +99,12 @@ data:
                   ]
                },
                {
-                  "aliasColors": {
-                     "error": "#E24D42"
-                  },
+                  "aliasColors": { },
                   "bars": false,
                   "dashLength": 10,
                   "dashes": false,
                   "datasource": "$datasource",
-                  "description": "Shows ratio of errors compared to the total number of executed compactions against blocks that are stored in the bucket.",
-                  "fill": 10,
+                  "fill": 1,
                   "id": 2,
                   "legend": {
                      "avg": false,
@@ -120,7 +116,7 @@ data:
                      "values": false
                   },
                   "lines": true,
-                  "linewidth": 0,
+                  "linewidth": 1,
                   "links": [ ],
                   "nullPointMode": "null as zero",
                   "percentage": false,
@@ -129,103 +125,15 @@ data:
                   "renderer": "flot",
                   "seriesOverrides": [ ],
                   "spaceLength": 10,
-                  "span": 6,
-                  "stack": true,
+                  "span": 4,
+                  "stack": false,
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "sum by (job) (rate(acm_thanos_compact_group_compactions_failures_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval])) / sum by (job) (rate(acm_thanos_compact_group_compactions_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))",
+                        "expr": "sum by (job, strategy) (increase(prometheus_rule_group_iterations_missed_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))",
                         "format": "time_series",
                         "intervalFactor": 2,
-                        "legendFormat": "error",
-                        "step": 10
-                     }
-                  ],
-                  "thresholds": [ ],
-                  "timeFrom": null,
-                  "timeShift": null,
-                  "title": "Errors",
-                  "tooltip": {
-                     "shared": false,
-                     "sort": 0,
-                     "value_type": "individual"
-                  },
-                  "type": "graph",
-                  "xaxis": {
-                     "buckets": null,
-                     "mode": "time",
-                     "name": null,
-                     "show": true,
-                     "values": [ ]
-                  },
-                  "yaxes": [
-                     {
-                        "format": "percentunit",
-                        "label": null,
-                        "logBase": 1,
-                        "max": null,
-                        "min": 0,
-                        "show": true
-                     },
-                     {
-                        "format": "short",
-                        "label": null,
-                        "logBase": 1,
-                        "max": null,
-                        "min": null,
-                        "show": false
-                     }
-                  ]
-               }
-            ],
-            "repeat": null,
-            "repeatIteration": null,
-            "repeatRowId": null,
-            "showTitle": true,
-            "title": "Group Compaction",
-            "titleSize": "h6"
-         },
-         {
-            "collapse": false,
-            "height": "250px",
-            "panels": [
-               {
-                  "aliasColors": { },
-                  "bars": false,
-                  "dashLength": 10,
-                  "dashes": false,
-                  "datasource": "$datasource",
-                  "description": "Shows rate of execution for downsampling against blocks that are stored in the bucket by compaction group.",
-                  "fill": 10,
-                  "id": 3,
-                  "legend": {
-                     "avg": false,
-                     "current": false,
-                     "max": false,
-                     "min": false,
-                     "show": true,
-                     "total": false,
-                     "values": false
-                  },
-                  "lines": true,
-                  "linewidth": 0,
-                  "links": [ ],
-                  "nullPointMode": "null as zero",
-                  "percentage": false,
-                  "pointradius": 5,
-                  "points": false,
-                  "renderer": "flot",
-                  "seriesOverrides": [ ],
-                  "spaceLength": 10,
-                  "span": 6,
-                  "stack": true,
-                  "steppedLine": false,
-                  "targets": [
-                     {
-                        "expr": "sum by (job, group) (rate(acm_thanos_compact_downsample_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))",
-                        "format": "time_series",
-                        "intervalFactor": 2,
-                        "legendFormat": "downsample {{job}} {{group}}",
+                        "legendFormat": "{{ strategy }}",
                         "legendLink": null,
                         "step": 10
                      }
@@ -233,7 +141,7 @@ data:
                   "thresholds": [ ],
                   "timeFrom": null,
                   "timeShift": null,
-                  "title": "Rate",
+                  "title": "Rule Group Evaluations Missed",
                   "tooltip": {
                      "shared": false,
                      "sort": 0,
@@ -267,16 +175,13 @@ data:
                   ]
                },
                {
-                  "aliasColors": {
-                     "error": "#E24D42"
-                  },
+                  "aliasColors": { },
                   "bars": false,
                   "dashLength": 10,
                   "dashes": false,
                   "datasource": "$datasource",
-                  "description": "Shows ratio of errors compared to the total number of executed downsampling against blocks that are stored in the bucket.",
-                  "fill": 10,
-                  "id": 4,
+                  "fill": 1,
+                  "id": 3,
                   "legend": {
                      "avg": false,
                      "current": false,
@@ -287,7 +192,7 @@ data:
                      "values": false
                   },
                   "lines": true,
-                  "linewidth": 0,
+                  "linewidth": 1,
                   "links": [ ],
                   "nullPointMode": "null as zero",
                   "percentage": false,
@@ -296,22 +201,23 @@ data:
                   "renderer": "flot",
                   "seriesOverrides": [ ],
                   "spaceLength": 10,
-                  "span": 6,
-                  "stack": true,
+                  "span": 4,
+                  "stack": false,
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "sum by (job) (rate(acm_thanos_compact_downsample_failed_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval])) / sum by (job) (rate(acm_thanos_compact_downsample_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))",
+                        "expr": "(\n  max by(job, rule_group) (prometheus_rule_group_last_duration_seconds{cluster=\"$cluster\", job=~\"$job\"})\n  >\n  sum by(job, rule_group) (prometheus_rule_group_interval_seconds{cluster=\"$cluster\", job=~\"$job\"})\n)\n",
                         "format": "time_series",
                         "intervalFactor": 2,
-                        "legendFormat": "error",
+                        "legendFormat": "{{ rule_group }}",
+                        "legendLink": null,
                         "step": 10
                      }
                   ],
                   "thresholds": [ ],
                   "timeFrom": null,
                   "timeShift": null,
-                  "title": "Errors",
+                  "title": "Rule Group Evlauations Too Slow",
                   "tooltip": {
                      "shared": false,
                      "sort": 0,
@@ -327,7 +233,7 @@ data:
                   },
                   "yaxes": [
                      {
-                        "format": "percentunit",
+                        "format": "short",
                         "label": null,
                         "logBase": 1,
                         "max": null,
@@ -349,7 +255,7 @@ data:
             "repeatIteration": null,
             "repeatRowId": null,
             "showTitle": true,
-            "title": "Downsample",
+            "title": "Rule Group Evaluations",
             "titleSize": "h6"
          },
          {
@@ -362,7 +268,84 @@ data:
                   "dashLength": 10,
                   "dashes": false,
                   "datasource": "$datasource",
-                  "description": "Shows rate of execution for removals of blocks if their data is available as part of a block with a higher compaction level.",
+                  "description": "Shows rate of dropped alerts.",
+                  "fill": 1,
+                  "id": 4,
+                  "legend": {
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "show": true,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null as zero",
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 3,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "sum by (job, alertmanager) (rate(acm_thanos_alert_sender_alerts_dropped_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{alertmanager}}",
+                        "legendLink": null,
+                        "step": 10
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Dropped Rate",
+                  "tooltip": {
+                     "shared": false,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "graph",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": 0,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": false
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": { },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "Shows rate of alerts that successfully sent to alert manager.",
                   "fill": 10,
                   "id": 5,
                   "legend": {
@@ -384,15 +367,15 @@ data:
                   "renderer": "flot",
                   "seriesOverrides": [ ],
                   "spaceLength": 10,
-                  "span": 4,
+                  "span": 3,
                   "stack": true,
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "sum by (job) (rate(acm_thanos_compact_garbage_collection_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))",
+                        "expr": "sum by (job, alertmanager) (rate(acm_thanos_alert_sender_alerts_sent_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))",
                         "format": "time_series",
                         "intervalFactor": 2,
-                        "legendFormat": "garbage collection {{job}}",
+                        "legendFormat": "{{alertmanager}}",
                         "legendLink": null,
                         "step": 10
                      }
@@ -400,7 +383,7 @@ data:
                   "thresholds": [ ],
                   "timeFrom": null,
                   "timeShift": null,
-                  "title": "Rate",
+                  "title": "Sent Rate",
                   "tooltip": {
                      "shared": false,
                      "sort": 0,
@@ -441,7 +424,7 @@ data:
                   "dashLength": 10,
                   "dashes": false,
                   "datasource": "$datasource",
-                  "description": "Shows ratio of errors compared to the total number of executed garbage collections.",
+                  "description": "Shows ratio of errors compared to the total number of sent alerts.",
                   "fill": 10,
                   "id": 6,
                   "legend": {
@@ -463,12 +446,12 @@ data:
                   "renderer": "flot",
                   "seriesOverrides": [ ],
                   "spaceLength": 10,
-                  "span": 4,
+                  "span": 3,
                   "stack": true,
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "sum by (job) (rate(acm_thanos_compact_garbage_collection_failures_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval])) / sum by (job) (rate(acm_thanos_compact_garbage_collection_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))",
+                        "expr": "sum by (job) (rate(acm_thanos_alert_sender_errors_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval])) / sum by (job) (rate(acm_thanos_alert_sender_alerts_sent_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "error",
@@ -478,7 +461,7 @@ data:
                   "thresholds": [ ],
                   "timeFrom": null,
                   "timeShift": null,
-                  "title": "Errors",
+                  "title": "Sent Errors",
                   "tooltip": {
                      "shared": false,
                      "sort": 0,
@@ -517,7 +500,7 @@ data:
                   "dashLength": 10,
                   "dashes": false,
                   "datasource": "$datasource",
-                  "description": "Shows how long has it taken to execute garbage collection in quantiles.",
+                  "description": "Shows how long has it taken to send alerts to alert manager.",
                   "fill": 1,
                   "id": 7,
                   "legend": {
@@ -558,12 +541,12 @@ data:
                      }
                   ],
                   "spaceLength": 10,
-                  "span": 4,
+                  "span": 3,
                   "stack": false,
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.50, sum by (job, le) (rate(acm_thanos_compact_garbage_collection_duration_seconds_bucket{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))) * 1",
+                        "expr": "histogram_quantile(0.50, sum by (job, le) (rate(acm_thanos_alert_sender_latency_seconds_bucket{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))) * 1",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "p50 {{job}}",
@@ -573,7 +556,7 @@ data:
                         "step": 10
                      },
                      {
-                        "expr": "histogram_quantile(0.90, sum by (job, le) (rate(acm_thanos_compact_garbage_collection_duration_seconds_bucket{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))) * 1",
+                        "expr": "histogram_quantile(0.90, sum by (job, le) (rate(acm_thanos_alert_sender_latency_seconds_bucket{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))) * 1",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "p90 {{job}}",
@@ -583,7 +566,7 @@ data:
                         "step": 10
                      },
                      {
-                        "expr": "histogram_quantile(0.99, sum by (job, le) (rate(acm_thanos_compact_garbage_collection_duration_seconds_bucket{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))) * 1",
+                        "expr": "histogram_quantile(0.99, sum by (job, le) (rate(acm_thanos_alert_sender_latency_seconds_bucket{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))) * 1",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "p99 {{job}}",
@@ -596,7 +579,7 @@ data:
                   "thresholds": [ ],
                   "timeFrom": null,
                   "timeShift": null,
-                  "title": "Duration",
+                  "title": "Sent Duration",
                   "tooltip": {
                      "shared": false,
                      "sort": 0,
@@ -634,7 +617,7 @@ data:
             "repeatIteration": null,
             "repeatRowId": null,
             "showTitle": true,
-            "title": "Garbage Collection",
+            "title": "Alert Sent",
             "titleSize": "h6"
          },
          {
@@ -647,9 +630,88 @@ data:
                   "dashLength": 10,
                   "dashes": false,
                   "datasource": "$datasource",
-                  "description": "Shows deletion rate of blocks already marked for deletion.",
-                  "fill": 10,
+                  "description": "Shows rate of queued alerts.",
+                  "fill": 1,
                   "id": 8,
+                  "legend": {
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "show": true,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "links": [ ],
+                  "nullPointMode": "null as zero",
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "seriesOverrides": [ ],
+                  "spaceLength": 10,
+                  "span": 6,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "sum by (job) (rate(acm_thanos_alert_queue_alerts_dropped_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{job}}",
+                        "legendLink": null,
+                        "step": 10
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Push Rate",
+                  "tooltip": {
+                     "shared": false,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "graph",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": 0,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": false
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": {
+                     "error": "#E24D42"
+                  },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "Shows ratio of dropped alerts compared to the total number of queued alerts.",
+                  "fill": 10,
+                  "id": 9,
                   "legend": {
                      "avg": false,
                      "current": false,
@@ -669,23 +731,22 @@ data:
                   "renderer": "flot",
                   "seriesOverrides": [ ],
                   "spaceLength": 10,
-                  "span": 4,
+                  "span": 6,
                   "stack": true,
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "sum by (job) (rate(acm_thanos_compact_blocks_cleaned_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))",
+                        "expr": "sum by (job) (rate(acm_thanos_alert_queue_alerts_dropped_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval])) / sum by (job) (rate(acm_thanos_alert_queue_alerts_pushed_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))",
                         "format": "time_series",
                         "intervalFactor": 2,
-                        "legendFormat": "Blocks cleanup {{job}}",
-                        "legendLink": null,
+                        "legendFormat": "error",
                         "step": 10
                      }
                   ],
                   "thresholds": [ ],
                   "timeFrom": null,
                   "timeShift": null,
-                  "title": "Deletion Rate",
+                  "title": "Drop Ratio",
                   "tooltip": {
                      "shared": false,
                      "sort": 0,
@@ -701,161 +762,7 @@ data:
                   },
                   "yaxes": [
                      {
-                        "format": "short",
-                        "label": null,
-                        "logBase": 1,
-                        "max": null,
-                        "min": 0,
-                        "show": true
-                     },
-                     {
-                        "format": "short",
-                        "label": null,
-                        "logBase": 1,
-                        "max": null,
-                        "min": null,
-                        "show": false
-                     }
-                  ]
-               },
-               {
-                  "aliasColors": { },
-                  "bars": false,
-                  "dashLength": 10,
-                  "dashes": false,
-                  "datasource": "$datasource",
-                  "description": "Shows deletion failures rate of blocks already marked for deletion.",
-                  "fill": 1,
-                  "id": 9,
-                  "legend": {
-                     "avg": false,
-                     "current": false,
-                     "max": false,
-                     "min": false,
-                     "show": true,
-                     "total": false,
-                     "values": false
-                  },
-                  "lines": true,
-                  "linewidth": 1,
-                  "links": [ ],
-                  "nullPointMode": "null as zero",
-                  "percentage": false,
-                  "pointradius": 5,
-                  "points": false,
-                  "renderer": "flot",
-                  "seriesOverrides": [ ],
-                  "spaceLength": 10,
-                  "span": 4,
-                  "stack": false,
-                  "steppedLine": false,
-                  "targets": [
-                     {
-                        "expr": "sum by (job) (rate(acm_thanos_compact_block_cleanup_failures_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))",
-                        "format": "time_series",
-                        "intervalFactor": 2,
-                        "legendFormat": "Blocks cleanup failures {{job}}",
-                        "legendLink": null,
-                        "step": 10
-                     }
-                  ],
-                  "thresholds": [ ],
-                  "timeFrom": null,
-                  "timeShift": null,
-                  "title": "Deletion Error Rate",
-                  "tooltip": {
-                     "shared": false,
-                     "sort": 0,
-                     "value_type": "individual"
-                  },
-                  "type": "graph",
-                  "xaxis": {
-                     "buckets": null,
-                     "mode": "time",
-                     "name": null,
-                     "show": true,
-                     "values": [ ]
-                  },
-                  "yaxes": [
-                     {
-                        "format": "short",
-                        "label": null,
-                        "logBase": 1,
-                        "max": null,
-                        "min": 0,
-                        "show": true
-                     },
-                     {
-                        "format": "short",
-                        "label": null,
-                        "logBase": 1,
-                        "max": null,
-                        "min": null,
-                        "show": false
-                     }
-                  ]
-               },
-               {
-                  "aliasColors": { },
-                  "bars": false,
-                  "dashLength": 10,
-                  "dashes": false,
-                  "datasource": "$datasource",
-                  "description": "Shows rate at which blocks are marked for deletion (from GC and retention policy).",
-                  "fill": 1,
-                  "id": 10,
-                  "legend": {
-                     "avg": false,
-                     "current": false,
-                     "max": false,
-                     "min": false,
-                     "show": true,
-                     "total": false,
-                     "values": false
-                  },
-                  "lines": true,
-                  "linewidth": 1,
-                  "links": [ ],
-                  "nullPointMode": "null as zero",
-                  "percentage": false,
-                  "pointradius": 5,
-                  "points": false,
-                  "renderer": "flot",
-                  "seriesOverrides": [ ],
-                  "spaceLength": 10,
-                  "span": 4,
-                  "stack": false,
-                  "steppedLine": false,
-                  "targets": [
-                     {
-                        "expr": "sum by (job) (rate(acm_thanos_compact_blocks_marked_for_deletion_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))",
-                        "format": "time_series",
-                        "intervalFactor": 2,
-                        "legendFormat": "Blocks marked {{job}}",
-                        "legendLink": null,
-                        "step": 10
-                     }
-                  ],
-                  "thresholds": [ ],
-                  "timeFrom": null,
-                  "timeShift": null,
-                  "title": "Marking Rate",
-                  "tooltip": {
-                     "shared": false,
-                     "sort": 0,
-                     "value_type": "individual"
-                  },
-                  "type": "graph",
-                  "xaxis": {
-                     "buckets": null,
-                     "mode": "time",
-                     "name": null,
-                     "show": true,
-                     "values": [ ]
-                  },
-                  "yaxes": [
-                     {
-                        "format": "short",
+                        "format": "percentunit",
                         "label": null,
                         "logBase": 1,
                         "max": null,
@@ -877,7 +784,7 @@ data:
             "repeatIteration": null,
             "repeatRowId": null,
             "showTitle": true,
-            "title": "Blocks deletion",
+            "title": "Alert Queue",
             "titleSize": "h6"
          },
          {
@@ -890,7 +797,158 @@ data:
                   "dashLength": 10,
                   "dashes": false,
                   "datasource": "$datasource",
-                  "description": "Shows rate of execution for all meta files from blocks in the bucket into the memory.",
+                  "description": "Shows rate of handled Unary gRPC requests.",
+                  "fill": 10,
+                  "id": 10,
+                  "legend": {
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "show": true,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 0,
+                  "links": [ ],
+                  "nullPointMode": "null as zero",
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "seriesOverrides": [
+                     {
+                        "alias": "/Aborted/",
+                        "color": "#EAB839"
+                     },
+                     {
+                        "alias": "/AlreadyExists/",
+                        "color": "#37872D"
+                     },
+                     {
+                        "alias": "/FailedPrecondition/",
+                        "color": "#E0B400"
+                     },
+                     {
+                        "alias": "/Unimplemented/",
+                        "color": "#E0B400"
+                     },
+                     {
+                        "alias": "/InvalidArgument/",
+                        "color": "#1F60C4"
+                     },
+                     {
+                        "alias": "/NotFound/",
+                        "color": "#1F60C4"
+                     },
+                     {
+                        "alias": "/PermissionDenied/",
+                        "color": "#1F60C4"
+                     },
+                     {
+                        "alias": "/Unauthenticated/",
+                        "color": "#1F60C4"
+                     },
+                     {
+                        "alias": "/Canceled/",
+                        "color": "#C4162A"
+                     },
+                     {
+                        "alias": "/DataLoss/",
+                        "color": "#C4162A"
+                     },
+                     {
+                        "alias": "/DeadlineExceeded/",
+                        "color": "#C4162A"
+                     },
+                     {
+                        "alias": "/Internal/",
+                        "color": "#C4162A"
+                     },
+                     {
+                        "alias": "/OutOfRange/",
+                        "color": "#C4162A"
+                     },
+                     {
+                        "alias": "/ResourceExhausted/",
+                        "color": "#C4162A"
+                     },
+                     {
+                        "alias": "/Unavailable/",
+                        "color": "#C4162A"
+                     },
+                     {
+                        "alias": "/Unknown/",
+                        "color": "#C4162A"
+                     },
+                     {
+                        "alias": "/OK/",
+                        "color": "#37872D"
+                     },
+                     {
+                        "alias": "error",
+                        "color": "#C4162A"
+                     }
+                  ],
+                  "spaceLength": 10,
+                  "span": 4,
+                  "stack": true,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "sum by (job, grpc_method, grpc_code) (rate(acm_grpc_server_handled_total{cluster=\"$cluster\", job=~\"$job\", grpc_type=\"unary\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{job}} {{grpc_method}} {{grpc_code}}",
+                        "step": 10
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Rate",
+                  "tooltip": {
+                     "shared": false,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "graph",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": 0,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": false
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": {
+                     "error": "#E24D42"
+                  },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "Shows ratio of errors compared to the total number of handled requests.",
                   "fill": 10,
                   "id": 11,
                   "legend": {
@@ -917,86 +975,7 @@ data:
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "sum by (job) (rate(acm_thanos_blocks_meta_syncs_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))",
-                        "format": "time_series",
-                        "intervalFactor": 2,
-                        "legendFormat": "sync {{job}}",
-                        "legendLink": null,
-                        "step": 10
-                     }
-                  ],
-                  "thresholds": [ ],
-                  "timeFrom": null,
-                  "timeShift": null,
-                  "title": "Rate",
-                  "tooltip": {
-                     "shared": false,
-                     "sort": 0,
-                     "value_type": "individual"
-                  },
-                  "type": "graph",
-                  "xaxis": {
-                     "buckets": null,
-                     "mode": "time",
-                     "name": null,
-                     "show": true,
-                     "values": [ ]
-                  },
-                  "yaxes": [
-                     {
-                        "format": "short",
-                        "label": null,
-                        "logBase": 1,
-                        "max": null,
-                        "min": 0,
-                        "show": true
-                     },
-                     {
-                        "format": "short",
-                        "label": null,
-                        "logBase": 1,
-                        "max": null,
-                        "min": null,
-                        "show": false
-                     }
-                  ]
-               },
-               {
-                  "aliasColors": {
-                     "error": "#E24D42"
-                  },
-                  "bars": false,
-                  "dashLength": 10,
-                  "dashes": false,
-                  "datasource": "$datasource",
-                  "description": "Shows ratio of errors compared to the total number of executed meta file sync.",
-                  "fill": 10,
-                  "id": 12,
-                  "legend": {
-                     "avg": false,
-                     "current": false,
-                     "max": false,
-                     "min": false,
-                     "show": true,
-                     "total": false,
-                     "values": false
-                  },
-                  "lines": true,
-                  "linewidth": 0,
-                  "links": [ ],
-                  "nullPointMode": "null as zero",
-                  "percentage": false,
-                  "pointradius": 5,
-                  "points": false,
-                  "renderer": "flot",
-                  "seriesOverrides": [ ],
-                  "spaceLength": 10,
-                  "span": 4,
-                  "stack": true,
-                  "steppedLine": false,
-                  "targets": [
-                     {
-                        "expr": "sum by (job) (rate(acm_thanos_blocks_meta_sync_failures_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval])) / sum by (job) (rate(acm_thanos_blocks_meta_syncs_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))",
+                        "expr": "sum by (job) (rate(acm_grpc_server_handled_total{cluster=\"$cluster\", grpc_code=~\"Unknown|ResourceExhausted|Internal|Unavailable|DataLoss\",job=~\"$job\", grpc_type=\"unary\"}[$__rate_interval])) / sum by (job) (rate(acm_grpc_server_handled_total{cluster=\"$cluster\", job=~\"$job\", grpc_type=\"unary\"}[$__rate_interval]))",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "error",
@@ -1045,9 +1024,9 @@ data:
                   "dashLength": 10,
                   "dashes": false,
                   "datasource": "$datasource",
-                  "description": "Shows how long has it taken to execute meta file sync, in quantiles.",
+                  "description": "Shows how long has it taken to handle requests, in quantiles.",
                   "fill": 1,
-                  "id": 13,
+                  "id": 12,
                   "legend": {
                      "avg": false,
                      "current": false,
@@ -1091,7 +1070,7 @@ data:
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.50, sum by (job, le) (rate(acm_thanos_blocks_meta_sync_duration_seconds_bucket{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))) * 1",
+                        "expr": "histogram_quantile(0.50, sum by (job, le) (rate(acm_grpc_server_handling_seconds_bucket{cluster=\"$cluster\", job=~\"$job\", grpc_type=\"unary\"}[$__rate_interval]))) * 1",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "p50 {{job}}",
@@ -1101,7 +1080,7 @@ data:
                         "step": 10
                      },
                      {
-                        "expr": "histogram_quantile(0.90, sum by (job, le) (rate(acm_thanos_blocks_meta_sync_duration_seconds_bucket{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))) * 1",
+                        "expr": "histogram_quantile(0.90, sum by (job, le) (rate(acm_grpc_server_handling_seconds_bucket{cluster=\"$cluster\", job=~\"$job\", grpc_type=\"unary\"}[$__rate_interval]))) * 1",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "p90 {{job}}",
@@ -1111,7 +1090,7 @@ data:
                         "step": 10
                      },
                      {
-                        "expr": "histogram_quantile(0.99, sum by (job, le) (rate(acm_thanos_blocks_meta_sync_duration_seconds_bucket{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))) * 1",
+                        "expr": "histogram_quantile(0.99, sum by (job, le) (rate(acm_grpc_server_handling_seconds_bucket{cluster=\"$cluster\", job=~\"$job\", grpc_type=\"unary\"}[$__rate_interval]))) * 1",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "p99 {{job}}",
@@ -1162,7 +1141,7 @@ data:
             "repeatIteration": null,
             "repeatRowId": null,
             "showTitle": true,
-            "title": "Sync Meta",
+            "title": "gRPC (Unary)",
             "titleSize": "h6"
          },
          {
@@ -1175,7 +1154,158 @@ data:
                   "dashLength": 10,
                   "dashes": false,
                   "datasource": "$datasource",
-                  "description": "Shows rate of execution for operations against the bucket.",
+                  "description": "Shows rate of handled Streamed gRPC requests.",
+                  "fill": 10,
+                  "id": 13,
+                  "legend": {
+                     "avg": false,
+                     "current": false,
+                     "max": false,
+                     "min": false,
+                     "show": true,
+                     "total": false,
+                     "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 0,
+                  "links": [ ],
+                  "nullPointMode": "null as zero",
+                  "percentage": false,
+                  "pointradius": 5,
+                  "points": false,
+                  "renderer": "flot",
+                  "seriesOverrides": [
+                     {
+                        "alias": "/Aborted/",
+                        "color": "#EAB839"
+                     },
+                     {
+                        "alias": "/AlreadyExists/",
+                        "color": "#37872D"
+                     },
+                     {
+                        "alias": "/FailedPrecondition/",
+                        "color": "#E0B400"
+                     },
+                     {
+                        "alias": "/Unimplemented/",
+                        "color": "#E0B400"
+                     },
+                     {
+                        "alias": "/InvalidArgument/",
+                        "color": "#1F60C4"
+                     },
+                     {
+                        "alias": "/NotFound/",
+                        "color": "#1F60C4"
+                     },
+                     {
+                        "alias": "/PermissionDenied/",
+                        "color": "#1F60C4"
+                     },
+                     {
+                        "alias": "/Unauthenticated/",
+                        "color": "#1F60C4"
+                     },
+                     {
+                        "alias": "/Canceled/",
+                        "color": "#C4162A"
+                     },
+                     {
+                        "alias": "/DataLoss/",
+                        "color": "#C4162A"
+                     },
+                     {
+                        "alias": "/DeadlineExceeded/",
+                        "color": "#C4162A"
+                     },
+                     {
+                        "alias": "/Internal/",
+                        "color": "#C4162A"
+                     },
+                     {
+                        "alias": "/OutOfRange/",
+                        "color": "#C4162A"
+                     },
+                     {
+                        "alias": "/ResourceExhausted/",
+                        "color": "#C4162A"
+                     },
+                     {
+                        "alias": "/Unavailable/",
+                        "color": "#C4162A"
+                     },
+                     {
+                        "alias": "/Unknown/",
+                        "color": "#C4162A"
+                     },
+                     {
+                        "alias": "/OK/",
+                        "color": "#37872D"
+                     },
+                     {
+                        "alias": "error",
+                        "color": "#C4162A"
+                     }
+                  ],
+                  "spaceLength": 10,
+                  "span": 4,
+                  "stack": true,
+                  "steppedLine": false,
+                  "targets": [
+                     {
+                        "expr": "sum by (job, grpc_method, grpc_code) (rate(acm_grpc_server_handled_total{cluster=\"$cluster\", job=~\"$job\", grpc_type=\"server_stream\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{job}} {{grpc_method}} {{grpc_code}}",
+                        "step": 10
+                     }
+                  ],
+                  "thresholds": [ ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Rate",
+                  "tooltip": {
+                     "shared": false,
+                     "sort": 0,
+                     "value_type": "individual"
+                  },
+                  "type": "graph",
+                  "xaxis": {
+                     "buckets": null,
+                     "mode": "time",
+                     "name": null,
+                     "show": true,
+                     "values": [ ]
+                  },
+                  "yaxes": [
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": 0,
+                        "show": true
+                     },
+                     {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": false
+                     }
+                  ]
+               },
+               {
+                  "aliasColors": {
+                     "error": "#E24D42"
+                  },
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "$datasource",
+                  "description": "Shows ratio of errors compared to the total number of handled requests.",
                   "fill": 10,
                   "id": 14,
                   "legend": {
@@ -1202,86 +1332,7 @@ data:
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "sum by (job, operation) (rate(acm_thanos_objstore_bucket_operations_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))",
-                        "format": "time_series",
-                        "intervalFactor": 2,
-                        "legendFormat": "{{job}} {{operation}}",
-                        "legendLink": null,
-                        "step": 10
-                     }
-                  ],
-                  "thresholds": [ ],
-                  "timeFrom": null,
-                  "timeShift": null,
-                  "title": "Rate",
-                  "tooltip": {
-                     "shared": false,
-                     "sort": 0,
-                     "value_type": "individual"
-                  },
-                  "type": "graph",
-                  "xaxis": {
-                     "buckets": null,
-                     "mode": "time",
-                     "name": null,
-                     "show": true,
-                     "values": [ ]
-                  },
-                  "yaxes": [
-                     {
-                        "format": "short",
-                        "label": null,
-                        "logBase": 1,
-                        "max": null,
-                        "min": 0,
-                        "show": true
-                     },
-                     {
-                        "format": "short",
-                        "label": null,
-                        "logBase": 1,
-                        "max": null,
-                        "min": null,
-                        "show": false
-                     }
-                  ]
-               },
-               {
-                  "aliasColors": {
-                     "error": "#E24D42"
-                  },
-                  "bars": false,
-                  "dashLength": 10,
-                  "dashes": false,
-                  "datasource": "$datasource",
-                  "description": "Shows ratio of errors compared to the total number of executed operations against the bucket.",
-                  "fill": 10,
-                  "id": 15,
-                  "legend": {
-                     "avg": false,
-                     "current": false,
-                     "max": false,
-                     "min": false,
-                     "show": true,
-                     "total": false,
-                     "values": false
-                  },
-                  "lines": true,
-                  "linewidth": 0,
-                  "links": [ ],
-                  "nullPointMode": "null as zero",
-                  "percentage": false,
-                  "pointradius": 5,
-                  "points": false,
-                  "renderer": "flot",
-                  "seriesOverrides": [ ],
-                  "spaceLength": 10,
-                  "span": 4,
-                  "stack": true,
-                  "steppedLine": false,
-                  "targets": [
-                     {
-                        "expr": "sum by (job) (rate(acm_thanos_objstore_bucket_operation_failures_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval])) / sum by (job) (rate(acm_thanos_objstore_bucket_operations_total{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))",
+                        "expr": "sum by (job) (rate(acm_grpc_server_handled_total{cluster=\"$cluster\", grpc_code=~\"Unknown|ResourceExhausted|Internal|Unavailable|DataLoss\",job=~\"$job\", grpc_type=\"server_stream\"}[$__rate_interval])) / sum by (job) (rate(acm_grpc_server_handled_total{cluster=\"$cluster\", job=~\"$job\", grpc_type=\"server_stream\"}[$__rate_interval]))",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "error",
@@ -1330,9 +1381,9 @@ data:
                   "dashLength": 10,
                   "dashes": false,
                   "datasource": "$datasource",
-                  "description": "Shows how long has it taken to execute operations against the bucket, in quantiles.",
+                  "description": "Shows how long has it taken to handle requests, in quantiles",
                   "fill": 1,
-                  "id": 16,
+                  "id": 15,
                   "legend": {
                      "avg": false,
                      "current": false,
@@ -1376,7 +1427,7 @@ data:
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.50, sum by (job, le) (rate(acm_thanos_objstore_bucket_operation_duration_seconds_bucket{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))) * 1",
+                        "expr": "histogram_quantile(0.50, sum by (job, le) (rate(acm_grpc_server_handling_seconds_bucket{cluster=\"$cluster\", job=~\"$job\", grpc_type=\"server_stream\"}[$__rate_interval]))) * 1",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "p50 {{job}}",
@@ -1386,7 +1437,7 @@ data:
                         "step": 10
                      },
                      {
-                        "expr": "histogram_quantile(0.90, sum by (job, le) (rate(acm_thanos_objstore_bucket_operation_duration_seconds_bucket{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))) * 1",
+                        "expr": "histogram_quantile(0.90, sum by (job, le) (rate(acm_grpc_server_handling_seconds_bucket{cluster=\"$cluster\", job=~\"$job\", grpc_type=\"server_stream\"}[$__rate_interval]))) * 1",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "p90 {{job}}",
@@ -1396,7 +1447,7 @@ data:
                         "step": 10
                      },
                      {
-                        "expr": "histogram_quantile(0.99, sum by (job, le) (rate(acm_thanos_objstore_bucket_operation_duration_seconds_bucket{cluster=\"$cluster\", job=~\"$job\"}[$__rate_interval]))) * 1",
+                        "expr": "histogram_quantile(0.99, sum by (job, le) (rate(acm_grpc_server_handling_seconds_bucket{cluster=\"$cluster\", job=~\"$job\", grpc_type=\"server_stream\"}[$__rate_interval]))) * 1",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "p99 {{job}}",
@@ -1447,288 +1498,8 @@ data:
             "repeatIteration": null,
             "repeatRowId": null,
             "showTitle": true,
-            "title": "Object Store Operations",
+            "title": "gRPC (Stream)",
             "titleSize": "h6"
-         # },
-         # {
-         #    "collapse": true,
-         #    "height": "250px",
-         #    "panels": [
-         #       {
-         #          "aliasColors": { },
-         #          "bars": false,
-         #          "dashLength": 10,
-         #          "dashes": false,
-         #          "datasource": "$datasource",
-         #          "fill": 1,
-         #          "id": 17,
-         #          "legend": {
-         #             "avg": false,
-         #             "current": false,
-         #             "max": false,
-         #             "min": false,
-         #             "show": true,
-         #             "total": false,
-         #             "values": false
-         #          },
-         #          "lines": true,
-         #          "linewidth": 1,
-         #          "links": [ ],
-         #          "nullPointMode": "null as zero",
-         #          "percentage": false,
-         #          "pointradius": 5,
-         #          "points": false,
-         #          "renderer": "flot",
-         #          "seriesOverrides": [ ],
-         #          "spaceLength": 10,
-         #          "span": 4,
-         #          "stack": false,
-         #          "steppedLine": false,
-         #          "targets": [
-         #             {
-         #                "expr": "acm_go_memstats_alloc_bytes{cluster=\"$cluster\", job=~\"$job\"}",
-         #                "format": "time_series",
-         #                "intervalFactor": 2,
-         #                "legendFormat": "alloc all {{instance}}",
-         #                "legendLink": null,
-         #                "step": 10
-         #             },
-         #             {
-         #                "expr": "acm_go_memstats_heap_alloc_bytes{cluster=\"$cluster\", job=~\"$job\"}",
-         #                "format": "time_series",
-         #                "intervalFactor": 2,
-         #                "legendFormat": "alloc heap {{instance}}",
-         #                "legendLink": null,
-         #                "step": 10
-         #             },
-         #             {
-         #                "expr": "rate(acm_go_memstats_alloc_bytes_total{cluster=\"$cluster\", job=~\"$job\"}[30s])",
-         #                "format": "time_series",
-         #                "intervalFactor": 2,
-         #                "legendFormat": "alloc rate all {{instance}}",
-         #                "legendLink": null,
-         #                "step": 10
-         #             },
-         #             {
-         #                "expr": "rate(acm_go_memstats_heap_alloc_bytes{cluster=\"$cluster\", job=~\"$job\"}[30s])",
-         #                "format": "time_series",
-         #                "intervalFactor": 2,
-         #                "legendFormat": "alloc rate heap {{instance}}",
-         #                "legendLink": null,
-         #                "step": 10
-         #             },
-         #             {
-         #                "expr": "acm_go_memstats_stack_inuse_bytes{cluster=\"$cluster\", job=~\"$job\"}",
-         #                "format": "time_series",
-         #                "intervalFactor": 2,
-         #                "legendFormat": "inuse heap {{instance}}",
-         #                "legendLink": null,
-         #                "step": 10
-         #             },
-         #             {
-         #                "expr": "acm_go_memstats_heap_inuse_bytes{cluster=\"$cluster\", job=~\"$job\"}",
-         #                "format": "time_series",
-         #                "intervalFactor": 2,
-         #                "legendFormat": "inuse stack {{instance}}",
-         #                "legendLink": null,
-         #                "step": 10
-         #             }
-         #          ],
-         #          "thresholds": [ ],
-         #          "timeFrom": null,
-         #          "timeShift": null,
-         #          "title": "Memory Used",
-         #          "tooltip": {
-         #             "shared": false,
-         #             "sort": 0,
-         #             "value_type": "individual"
-         #          },
-         #          "type": "graph",
-         #          "xaxis": {
-         #             "buckets": null,
-         #             "mode": "time",
-         #             "name": null,
-         #             "show": true,
-         #             "values": [ ]
-         #          },
-         #          "yaxes": [
-         #             {
-         #                "format": "bytes",
-         #                "label": null,
-         #                "logBase": 1,
-         #                "max": null,
-         #                "min": 0,
-         #                "show": true
-         #             },
-         #             {
-         #                "format": "short",
-         #                "label": null,
-         #                "logBase": 1,
-         #                "max": null,
-         #                "min": null,
-         #                "show": false
-         #             }
-         #          ]
-         #       },
-         #       {
-         #          "aliasColors": { },
-         #          "bars": false,
-         #          "dashLength": 10,
-         #          "dashes": false,
-         #          "datasource": "$datasource",
-         #          "fill": 1,
-         #          "id": 18,
-         #          "legend": {
-         #             "avg": false,
-         #             "current": false,
-         #             "max": false,
-         #             "min": false,
-         #             "show": true,
-         #             "total": false,
-         #             "values": false
-         #          },
-         #          "lines": true,
-         #          "linewidth": 1,
-         #          "links": [ ],
-         #          "nullPointMode": "null as zero",
-         #          "percentage": false,
-         #          "pointradius": 5,
-         #          "points": false,
-         #          "renderer": "flot",
-         #          "seriesOverrides": [ ],
-         #          "spaceLength": 10,
-         #          "span": 4,
-         #          "stack": false,
-         #          "steppedLine": false,
-         #          "targets": [
-         #             {
-         #                "expr": "acm_go_goroutines{cluster=\"$cluster\", job=~\"$job\"}",
-         #                "format": "time_series",
-         #                "intervalFactor": 2,
-         #                "legendFormat": "{{instance}}",
-         #                "legendLink": null,
-         #                "step": 10
-         #             }
-         #          ],
-         #          "thresholds": [ ],
-         #          "timeFrom": null,
-         #          "timeShift": null,
-         #          "title": "Goroutines",
-         #          "tooltip": {
-         #             "shared": false,
-         #             "sort": 0,
-         #             "value_type": "individual"
-         #          },
-         #          "type": "graph",
-         #          "xaxis": {
-         #             "buckets": null,
-         #             "mode": "time",
-         #             "name": null,
-         #             "show": true,
-         #             "values": [ ]
-         #          },
-         #          "yaxes": [
-         #             {
-         #                "format": "short",
-         #                "label": null,
-         #                "logBase": 1,
-         #                "max": null,
-         #                "min": 0,
-         #                "show": true
-         #             },
-         #             {
-         #                "format": "short",
-         #                "label": null,
-         #                "logBase": 1,
-         #                "max": null,
-         #                "min": null,
-         #                "show": false
-         #             }
-         #          ]
-         #       },
-         #       {
-         #          "aliasColors": { },
-         #          "bars": false,
-         #          "dashLength": 10,
-         #          "dashes": false,
-         #          "datasource": "$datasource",
-         #          "fill": 1,
-         #          "id": 19,
-         #          "legend": {
-         #             "avg": false,
-         #             "current": false,
-         #             "max": false,
-         #             "min": false,
-         #             "show": true,
-         #             "total": false,
-         #             "values": false
-         #          },
-         #          "lines": true,
-         #          "linewidth": 1,
-         #          "links": [ ],
-         #          "nullPointMode": "null as zero",
-         #          "percentage": false,
-         #          "pointradius": 5,
-         #          "points": false,
-         #          "renderer": "flot",
-         #          "seriesOverrides": [ ],
-         #          "spaceLength": 10,
-         #          "span": 4,
-         #          "stack": false,
-         #          "steppedLine": false,
-         #          "targets": [
-         #             {
-         #                "expr": "acm_go_gc_duration_seconds{cluster=\"$cluster\", job=~\"$job\"}",
-         #                "format": "time_series",
-         #                "intervalFactor": 2,
-         #                "legendFormat": "{{quantile}} {{instance}}",
-         #                "legendLink": null,
-         #                "step": 10
-         #             }
-         #          ],
-         #          "thresholds": [ ],
-         #          "timeFrom": null,
-         #          "timeShift": null,
-         #          "title": "GC Time Quantiles",
-         #          "tooltip": {
-         #             "shared": false,
-         #             "sort": 0,
-         #             "value_type": "individual"
-         #          },
-         #          "type": "graph",
-         #          "xaxis": {
-         #             "buckets": null,
-         #             "mode": "time",
-         #             "name": null,
-         #             "show": true,
-         #             "values": [ ]
-         #          },
-         #          "yaxes": [
-         #             {
-         #                "format": "short",
-         #                "label": null,
-         #                "logBase": 1,
-         #                "max": null,
-         #                "min": 0,
-         #                "show": true
-         #             },
-         #             {
-         #                "format": "short",
-         #                "label": null,
-         #                "logBase": 1,
-         #                "max": null,
-         #                "min": null,
-         #                "show": false
-         #             }
-         #          ]
-         #       }
-         #    ],
-         #    "repeat": null,
-         #    "repeatIteration": null,
-         #    "repeatRowId": null,
-         #    "showTitle": true,
-         #    "title": "Resources",
-         #    "titleSize": "h6"
          }
       ],
       "schemaVersion": 14,
@@ -1783,7 +1554,7 @@ data:
                "multi": false,
                "name": "job",
                "options": [ ],
-               "query": "label_values(up{job=~\".*thanos-compact.*\"}, job)",
+               "query": "label_values(up{job=~\".*thanos-rule.*\"}, job)",
                "refresh": 1,
                "regex": "",
                "sort": 2,
@@ -1825,7 +1596,7 @@ data:
          ]
       },
       "timezone": "UTC",
-      "title": "Thanos / Compact",
-      "uid": "651943d05a8123e32867b4673963f42b",
+      "title": "Thanos / Rule",
+      "uid": "35da848f5f92b2dc612e0c3a0577b8a1",
       "version": 0
    }
