@@ -5,7 +5,26 @@ metadata:
 data:
   metrics_list.yaml: |
     names:
+    - kube_pod_status_phase
+    - kube_pod_status_ready
+    - kube_pod_container_status_restarts_total
     - acm_managed_cluster_info
+    - open_cluster_management_client_certificate_created_total
+    - open_cluster_management_client_certificate_invalid_total
+    - open_cluster_management_client_certificate_rotation_total
+    - open_cluster_management_csr_created_total
+    - open_cluster_management_managed_cluster_created_total
+    - open_cluster_management_managed_cluster_accepted_total
+    - open_cluster_management_managed_cluster_denied_total
+    - open_cluster_management_managed_cluster_joined_total
+    - open_cluster_management_managed_cluster_deleted_total
+    - open_cluster_management_managed_cluster_true_total
+    - open_cluster_management_managed_cluster_false_total
+    - open_cluster_management_managed_cluster_unknown_total
+    - open_cluster_management_managed_cluster_lease_update_total
+    - open_cluster_management_managed_cluster_addon_true_total
+    - open_cluster_management_managed_cluster_addon_false_total
+    - open_cluster_management_managed_cluster_addon_unknown_total
     # - policy_governance_info
     # - policyreport_info
     # - acm_go_memstats_alloc_bytes
