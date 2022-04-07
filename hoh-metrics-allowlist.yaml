@@ -13,9 +13,14 @@ data:
     - open_cluster_management_client_certificate_invalid_total
     - open_cluster_management_client_certificate_rotation_total
     - open_cluster_management_csr_created_total
+    - open_cluster_management_csr_approved_total
+    - open_cluster_management_csr_approve_durating_seconds
     - open_cluster_management_managed_cluster_created_total
     - open_cluster_management_managed_cluster_accepted_total
     - open_cluster_management_managed_cluster_denied_total
+    - open_cluster_management_managed_cluster_imported_total
+    - open_cluster_management_managed_cluster_import_failure_total
+    - open_cluster_management_managed_cluster_import_durating_seconds
     - open_cluster_management_managed_cluster_joined_total
     - open_cluster_management_managed_cluster_deleted_total
     - open_cluster_management_managed_cluster_true_total
@@ -25,8 +30,45 @@ data:
     - open_cluster_management_managed_cluster_addon_true_total
     - open_cluster_management_managed_cluster_addon_false_total
     - open_cluster_management_managed_cluster_addon_unknown_total
-    # - policy_governance_info
-    # - policyreport_info
+    - policy_governance_info
+    - policyreport_info
+    - policy_propagated_total
+    - policy_propagation_failure_total
+    - policy_propagation_duration_seconds
+    - policy_status_report_total
+    - policy_status_report_failure_total
+    - policy_status_report_duration_seconds
+    - application_applied_total
+    - application_apply_failure_total
+    - applicartion_apply_duration_seconds
+    - observability_metrics_push_total
+    - observability_metrics_push_failure_total
+    - observability_metrics_push_duration_seconds
+    - process_start_time_seconds
+    - argocd_app_info
+    - argocd_app_k8s_request_total
+    - argocd_app_labels
+    - argocd_app_reconcile
+    - argocd_app_sync_total
+    - argocd_cluster_api_resource_objects
+    - argocd_cluster_api_resources
+    - argocd_cluster_cache_age_seconds
+    - argocd_cluster_connection_status
+    - argocd_cluster_events_total
+    - argocd_cluster_info
+    - argocd_kubectl_exec_pending
+    - argocd_kubectl_exec_total
+    - argocd_redis_request_duration
+    - argocd_redis_request_total
+    - argocd_redis_request_duration
+    - argocd_redis_request_total
+    - argocd_git_request_duration_seconds
+    - argocd_git_request_total
+    - argocd_redis_request_duration_seconds
+    - argocd_redis_request_total
+    - argocd_repo_pending_request_total
+    - argocd_app_reconcile_count
+    - argocd_app_reconcile_bucket
     # - acm_go_memstats_alloc_bytes
     # - acm_go_memstats_heap_alloc_bytes
     # - acm_go_memstats_alloc_bytes_total
